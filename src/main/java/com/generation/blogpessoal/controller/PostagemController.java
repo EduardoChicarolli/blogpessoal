@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.generation.blogpessoal.model.Postagem;
 import com.generation.blogpessoal.repository.PostagemRepository;
+import com.generation.blogpessoal.repository.TemaRepository;
+
 
 @RestController
 @RequestMapping("/postagens")
@@ -27,13 +29,16 @@ public class PostagemController {
 
 	@Autowired
 	private PostagemRepository postagemRepository;
+	
+	@Autowired
+	private TemaRepository temaRepository;
 
 	@GetMapping
 	public ResponseEntity<List<Postagem>> getAll(){
 			return ResponseEntity.ok(postagemRepository.findAll());
 	}
 	
-	@GetMapping("/{id}") // o que estiver dentro de id vai ser uma variavel
+	@GetMapping("/{id}")
 	public ResponseEntity<Postagem> getById( @PathVariable long id){
 			return postagemRepository.findById(id)
 					.map(resposta -> ResponseEntity.ok(resposta))
@@ -51,6 +56,7 @@ public class PostagemController {
 			public ResponseEntity<Postagem> postPostagem(@Valid @RequestBody Postagem postagem ){ //valida e envia o objeto do corpo da reposição
 			return ResponseEntity.status(HttpStatus.CREATED).body(postagemRepository.save(postagem));
 			}
+			
 			
 			@PutMapping
 			public ResponseEntity<Postagem> putPostagem(@Valid @RequestBody Postagem postagem ){ //valida e envia o objeto do corpo da reposição
